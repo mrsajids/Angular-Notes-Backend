@@ -82,7 +82,7 @@ exports.gettoken = (req, res) => {
 exports.verifytoken = (req, res) => {
   const token = req.params?.token;
   if (!token) {
-    res.status(403).json({ message: "no token provided" });
+    res.status(403).json({ message: "no token provided" }); 
   }
   // verify a token symmetric
   jwt.verify(req.params.token, "12345", function (err, decoded) {
