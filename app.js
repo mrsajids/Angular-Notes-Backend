@@ -6,6 +6,7 @@ var logger = require("morgan");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var notesRouter = require("./routes/notes");
 const { dbConnection } = require("./config/dbconfig");
 const { errorHandler } = require("./utils/ErrorHandler");
 require("dotenv").config();
@@ -28,6 +29,7 @@ dbConnection();
 // app.use("/users", testing);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/notes", notesRouter);
 
 // Add error handler at the bottom
 app.use(errorHandler);

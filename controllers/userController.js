@@ -1,5 +1,3 @@
-//authentication
-const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const {
   validatePassword,
@@ -11,13 +9,13 @@ const response = require("../utils/responseManager");
 exports.registerUser = async (req, res) => {
   const { name, email, password, mobile } = req.body;
   if (!name || !email || !password) {
-    response.forbidden(res, "All fields are required");
+    return response.forbidden(res, "All fields are required");
   }
 
   try {
     const isExist = await User.find({ email: email });
     if (isExist.length) {
-      response.alreadyExist(res, "User already registered.");
+      return response.alreadyExist(res, "User already registered.");
     }
 
     // generate hash
@@ -33,7 +31,7 @@ exports.registerUser = async (req, res) => {
     newUser
       .save()
       .then((result) => {
-        response.success(res, "Successfully Registered.", result);
+        return response.success(res, "Successfully Registered.", result);
       })
       .catch((err) => next(err));
   } catch (error) {
@@ -44,21 +42,23 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    response.forbidden(res, "All fields are required");
+    return response.forbidden(res, "All fields are required");
   }
 
   try {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      response.notFound(res, "User is not registered");
+      return response.notFound(res, "User is not registered");
     } else {
       const validate = await validatePassword(password, user.password);
       if (validate) {
         // generate token
         const token = generateHeaderKey(email);
-        response.success(res, "Successfully Loged in.", { headerkey: token });
-      } else response.forbidden(res, "Incorrect Password");
+        return response.success(res, "Successfully Loged in.", {
+          headerkey: token,
+        });
+      } else return response.forbidden(res, "Incorrect Password");
     }
   } catch (error) {
     next(error);
