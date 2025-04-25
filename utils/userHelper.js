@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const response = require("./responseManager");
 
 const generateHashPassword = async (pass) => {
   const saltRounds = 10;
@@ -37,4 +38,22 @@ const generateHeaderKey = (email) => {
   }
 };
 
-module.exports = { generateHashPassword, validatePassword, generateHeaderKey };
+const verifytoken = (token, res, next) => {
+  if (!token) {
+    return response.forbidden(res, "No token provided");
+  }
+  // ******verify a token symmetric******
+  jwt.verify(token, process.env.JWTTOKEN, function (err, decoded) {
+    if (err) {
+      return response.unauthorized(res);
+    }
+    // res.status(200).json(decoded);
+    next(); // ******proceed further (middleware)******
+  });
+};
+module.exports = {
+  generateHashPassword,
+  validatePassword,
+  generateHeaderKey,
+  verifytoken,
+};

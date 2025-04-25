@@ -36,7 +36,7 @@ const ResponseManager = {
   alreadyExist: (res, message = "Already exists") =>
     sendResponse(res, 208, false, message),
 
-  notFound: (res, message = "Not Found") =>
+  notFound: (res, message = "Not Date Found") =>
     sendResponse(res, 404, false, message),
 
   serverError: (res, message = "Internal Server Error", error = {}) =>
