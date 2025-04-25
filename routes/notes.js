@@ -1,10 +1,16 @@
 const express = require("express");
-const { addNote, getNotes, updateNote, deleteNote } = require("../controllers/notes");
+const {
+  addNote,
+  getNotes,
+  updateNote,
+  deleteNote,
+} = require("../controllers/notes");
+const { verifytoken } = require("../utils/userHelper");
 const router = express.Router();
 
 router.post("/add", addNote);
 
-router.post("/all", getNotes);
+router.post("/all", verifytoken, getNotes);
 
 router.post("/update", updateNote);
 

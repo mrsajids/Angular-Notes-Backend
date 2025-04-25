@@ -28,11 +28,6 @@ exports.addNote = async (req, res, next) => {
 exports.getNotes = async (req, res, next) => {
   let { pageno, itemperpage } = req.body;
   const offset = getOffset(pageno, itemperpage);
-  const headerkey = req.headers["headerkey"]; // headerkey
-
-  console.log("headerkey", headerkey);
-
-  verifytoken(headerkey, res, next);
 
   try {
     const totalrecords = await Note.countDocuments();

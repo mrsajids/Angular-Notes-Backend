@@ -38,12 +38,14 @@ const generateHeaderKey = (email) => {
   }
 };
 
-const verifytoken = (token, res, next) => {
-  if (!token) {
+const verifytoken = (req, res, next) => {
+  const headerkey = req.headers["headerkey"];
+
+  if (!headerkey) {
     return response.forbidden(res, "No token provided");
   }
   // ******verify a token symmetric******
-  jwt.verify(token, process.env.JWTTOKEN, function (err, decoded) {
+  jwt.verify(headerkey, process.env.JWTTOKEN, function (err, decoded) {
     if (err) {
       return response.unauthorized(res);
     }
